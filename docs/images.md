@@ -1,5 +1,7 @@
 # 将 Codex Images 注册为 Claude Science 工具
 
+简体中文 | [English](en/images.md)
+
 ## 目标与边界
 
 该方案把本机 Codex 图像 endpoint 包装为 Claude Science 的本地 MCP 工具。它使用 Codex OAuth 所在的本机代理，但不是 Claude Science 或 Codex 的官方连接器。
