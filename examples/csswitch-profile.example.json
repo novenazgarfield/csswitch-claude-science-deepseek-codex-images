@@ -1,0 +1,6 @@
+{
+  "name": "Codex (ChatGPT OAuth)",
+  "base_url": "http://127.0.0.1:8317/v1",
+  "api_key": "<LOCAL_PROXY_API_KEY>",
+  "model": "<PROFILE_SPECIFIC_SLOT_MAPPING_MARKER>"
+}

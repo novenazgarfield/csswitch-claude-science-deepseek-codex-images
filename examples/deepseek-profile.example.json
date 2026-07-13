@@ -1,0 +1,6 @@
+{
+  "name": "DeepSeek",
+  "base_url": "https://api.deepseek.com/anthropic",
+  "api_key": "<DEEPSEEK_API_KEY>",
+  "model": "<DEEPSEEK_MODEL_ID>"
+}

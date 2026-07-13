@@ -1,0 +1,24 @@
+# Local credentials and CSSwitch state
+.env
+.env.*
+*.key
+*.pem
+*.token
+*.log
+config.local.*
+**/config.json
+
+# Runtime state and generated assets
+/runtime/
+/jobs/
+/images/
+/logs/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Python and macOS
+__pycache__/
+*.py[cod]
+.DS_Store

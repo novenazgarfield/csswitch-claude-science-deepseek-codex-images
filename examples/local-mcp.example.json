@@ -1,0 +1,12 @@
+{
+  "servers": [
+    {
+      "name": "codex-image",
+      "command": "<ABSOLUTE_PATH_TO_PYTHON3>",
+      "args": [
+        "<ABSOLUTE_PATH_TO_REPOSITORY>/scripts/codex_image_mcp_jobs.py"
+      ],
+      "description": "Submit and retrieve local asynchronous Codex image jobs."
+    }
+  ]
+}

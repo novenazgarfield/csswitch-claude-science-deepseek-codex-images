@@ -1,0 +1,7 @@
+[sandbox]
+# Allow only the MCP program and its restricted job directory.
+user_read_paths = [
+  "<ABSOLUTE_PATH_TO_REPOSITORY>/scripts",
+  "/tmp/csswitch-codex-image-jobs",
+]
+user_write_paths = ["/tmp/csswitch-codex-image-jobs"]

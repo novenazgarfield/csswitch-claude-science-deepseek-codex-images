@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.example.codex-image-job-bridge</string>
+  <key>ProgramArguments</key><array>
+    <string>&lt;ABSOLUTE_PATH_TO_PYTHON3&gt;</string>
+    <string>&lt;ABSOLUTE_PATH_TO_REPOSITORY&gt;/scripts/codex_image_job_bridge.py</string>
+  </array>
+  <key>EnvironmentVariables</key><dict>
+    <key>CODEX_IMAGE_JOB_ROOT</key><string>/tmp/csswitch-codex-image-jobs</string>
+    <key>CODEX_IMAGE_OUTPUT_DIR</key><string>/tmp/csswitch-codex-image-jobs/output</string>
+    <key>CSSWITCH_CONFIG_PATH</key><string>&lt;ABSOLUTE_PATH_TO_CSSWITCH_CONFIG&gt;</string>
+    <key>CODEX_IMAGE_PROFILE_NAME</key><string>&lt;LOCAL_CODEX_PROFILE_NAME&gt;</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardOutPath</key><string>&lt;ABSOLUTE_LOG_DIRECTORY&gt;/codex-image-job-bridge.log</string>
+  <key>StandardErrorPath</key><string>&lt;ABSOLUTE_LOG_DIRECTORY&gt;/codex-image-job-bridge.log</string>
+</dict></plist>
