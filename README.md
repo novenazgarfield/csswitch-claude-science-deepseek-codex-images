@@ -10,6 +10,8 @@
 
 本项目不是 CSSwitch、Claude Science、Anthropic 或 OpenAI 的官方扩展，不包含这些项目的源码、二进制文件、账号凭据或 API Key。
 
+> **版本基线（重要）**：本文档与样例在 **CSSwitch v0.3.6**（旧 Python proxy 架构）下验证。它们不能原样用于 v0.4.0 及以上版本（包括 v0.4.4）：新版 Rust gateway 会替换本项目三槽 Codex 路由所依赖的已安装代理补丁。详见[架构说明](docs/architecture.md)与[Codex 接入](docs/codex.md)。
+
 ## 文档入口
 
 | 目标 | 文档 |
@@ -54,7 +56,7 @@ scripts/    异步图像任务桥的沙箱端与宿主机端
 - DeepSeek：使用 Anthropic-compatible endpoint。
 - Codex 文本模型：已验证实现为本机 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI)，默认示例端口为 `127.0.0.1:8317`。
 - Codex Images：实验性本地集成，通过提交任务与轮询结果规避 MCP 单次调用超时。
-- Claude Science 内的多槽模型映射属于版本相关扩展；仓库说明其设计与已验证映射，但不修改或重新分发 CSSwitch 应用文件。
+- Claude Science 内的多槽模型映射仅在 CSSwitch v0.3.6 的旧 Python proxy 架构下验证；它依赖已安装应用中的版本相关补丁，不能直接升级到 v0.4.0+ / v0.4.4。仓库只记录设计与验证边界，不分发应用文件或自动补丁。
 
 ## 与 CSSwitch 的关系
 

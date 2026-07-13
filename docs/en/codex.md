@@ -13,6 +13,12 @@ Codex OAuth
   → Claude Science
 ```
 
+## Version baseline
+
+The complete integration in this document, including Sol / Terra / Luna three-slot switching, was verified with **CSSwitch v0.3.6** and its legacy Python proxy. CSSwitch moved to a Rust gateway in v0.4.0; upgrading to v0.4.4 replaces the installed Python-proxy patch used for slot mapping and does not recognize this setup's internal slot marker. Do not carry an existing three-slot configuration directly to v0.4.0+.
+
+For v0.4.0+, first use an explicit single Codex model ID in the profile and revalidate the text path yourself. Three-slot routing needs an equivalent Rust-gateway mapping before it can be restored.
+
 The verified proxy implementation for this repository is [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI). In the tested setup, CSSwitch manages it as a per-user local service. After Codex OAuth authentication, it listens on:
 
 ```text
@@ -87,7 +93,7 @@ The mapping must apply only to the Codex profile. It must not affect DeepSeek or
 }
 ```
 
-The current CSSwitch version may not support these fields natively. Patching files inside an installed application is version-dependent, can break after an upgrade, and is not a portable installation method. This repository therefore documents the mapping design and verified behavior without distributing application files or an automatic patcher. Prefer an upstream profile-level slot-mapping feature if one becomes available.
+This mapping was verified as a version-specific patch to the installed Python proxy in CSSwitch v0.3.6; it is not a portable CSSwitch configuration field. CSSwitch v0.4.0+ (including v0.4.4) uses a Rust gateway and cannot reuse that patch or its internal slot marker. This repository documents the mapping design and validation boundary without distributing application files or an automatic patcher. Prefer an upstream profile-level slot-mapping feature if one becomes available.
 
 ## Verification
 

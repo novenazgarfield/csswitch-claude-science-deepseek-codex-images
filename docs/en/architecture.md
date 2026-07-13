@@ -63,9 +63,10 @@ A watcher claims work by atomically moving each file between directories. This p
 
 ## Version boundaries
 
-- CSSwitch profile fields, directory layout, and internal gateway can change between versions. Use the current upstream documentation when deploying.
-- A single-model Codex profile relies only on public OpenAI-compatible configuration and has a lower maintenance cost.
-- Switching three Codex models through Claude Science slots requires an additional mapping layer and is version-dependent. Revalidate it after every CSSwitch upgrade.
+- The complete setup in this repository is verified against **CSSwitch v0.3.6**, especially Sol / Terra / Luna Codex slot routing; that implementation depends on a patch to the legacy Python proxy inside the installed application.
+- CSSwitch moved to a Rust gateway in v0.4.0. A direct upgrade to v0.4.4 replaces that Python proxy; internal markers such as `__CSSWITCH_CODEX_56_SLOTS__` have no equivalent new mapping, so the three-slot Codex text path breaks.
+- v0.4.4 reuses the persistent Claude Science data directory, so the image MCP, bridge scripts, and sandbox permissions are expected to remain. Its Codex text profile must nevertheless be reconfigured and revalidated first; that does not make the full integration compatible.
+- A single-model Codex profile relies only on public OpenAI-compatible configuration and has a lower maintenance cost. Use and validate that approach first on v0.4.0+.
 - The image MCP and host watcher belong to this project and are not built-in CSSwitch components.
 
 See [DeepSeek integration](deepseek.md), [Codex integration](codex.md), and the [Codex Images tool bridge](images.md) for setup instructions.

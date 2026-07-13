@@ -63,9 +63,10 @@ submit/<job_id>.json
 
 ## 版本边界
 
-- CSSwitch 的 Profile、目录结构和内部 gateway 可能随版本变化；部署时应以当前上游文档为准。
-- 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本较低。
-- Claude Science 三槽切换依赖额外模型映射能力，属于版本相关扩展；升级 CSSwitch 后必须重新验证。
+- 本仓库的完整方案以 **CSSwitch v0.3.6** 为验证基线，尤其是 Codex 的 Sol / Terra / Luna 三槽映射；该实现依赖旧版应用内的 Python proxy 补丁。
+- CSSwitch v0.4.0 起改用 Rust gateway。直接升级到 v0.4.4 会替换上述 Python proxy；`__CSSWITCH_CODEX_56_SLOTS__` 这类内部标记没有等价的新版映射，三槽 Codex 文本链路会失效。
+- v0.4.4 会复用持久化的 Claude Science 数据目录，因此图像 MCP、桥接脚本和沙箱权限预计仍会保留；但其依赖的 Codex 文本 Profile 必须先重新配置并验证，不能据此宣称整套方案兼容。
+- 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本较低；使用 v0.4.0+ 时应先采用这一方式并独立验证。
 - 图像 MCP 与 watcher 是本项目自有代码，不是 CSSwitch 的内置能力。
 
 具体操作分别见 [DeepSeek 接入](deepseek.md)、[Codex 接入](codex.md)和 [Codex Images 工具桥](images.md)。

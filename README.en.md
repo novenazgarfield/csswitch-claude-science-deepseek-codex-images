@@ -10,6 +10,8 @@ This repository documents a community integration for macOS with three goals:
 
 This project is not an official extension of CSSwitch, Claude Science, Anthropic, or OpenAI. It does not include source code or binaries from those projects, account credentials, or API keys.
 
+> **Version baseline (important):** These instructions and examples were verified with **CSSwitch v0.3.6** and its legacy Python-proxy architecture. They do not apply unchanged to v0.4.0+ (including v0.4.4): the Rust gateway replaces the installed proxy patch that this project uses for three-slot Codex routing. See [Architecture](docs/en/architecture.md) and [Codex integration](docs/en/codex.md).
+
 ## Documentation
 
 | Goal | Guide |
@@ -54,7 +56,7 @@ All configuration examples use placeholders or environment variables and must be
 - DeepSeek: connected through its Anthropic-compatible endpoint.
 - Codex text models: the verified implementation uses local [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) on the example address `127.0.0.1:8317`.
 - Codex Images: an experimental local integration that uses job submission and result polling to avoid one-shot MCP timeouts.
-- Multi-slot model routing inside Claude Science is version-dependent. This repository documents the design and a verified mapping, but does not modify or redistribute CSSwitch application files.
+- Multi-slot model routing inside Claude Science was verified only with CSSwitch v0.3.6's legacy Python proxy. It depends on a version-specific patch inside the installed application and cannot be carried directly to v0.4.0+ / v0.4.4. This repository records the design and validation boundary but does not distribute application files or an automatic patcher.
 
 ## Relationship to CSSwitch
 
