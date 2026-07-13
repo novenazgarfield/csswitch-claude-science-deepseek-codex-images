@@ -27,7 +27,7 @@ http://127.0.0.1:8317/v1/images/generations
 
 ## 前置条件
 
-- DeepSeek 或其他 CSSwitch Profile 已能正常启动 Claude Science；
+- CSSwitch 已能正常启动隔离的 Claude Science；
 - CLIProxyAPI 或等价的本机 Codex OAuth 代理处于运行状态；
 - 代理提供本地 Base URL、访问该本地代理所需的 Key，以及 `/v1/models` 或兼容模型列表；
 - 代理没有监听 `0.0.0.0` 或对局域网开放。
