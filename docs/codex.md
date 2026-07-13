@@ -1,5 +1,7 @@
 # 将 Codex OAuth 文本模型接入 Claude Science
 
+简体中文 | [English](en/codex.md)
+
 ## 方案概览
 
 Claude Science 不直接读取 Codex OAuth。接入分为两层：

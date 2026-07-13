@@ -1,5 +1,7 @@
 # 将 DeepSeek 接入 Claude Science
 
+简体中文 | [English](en/deepseek.md)
+
 ## 适用场景
 
 DeepSeek 提供 Anthropic-compatible endpoint，可由 CSSwitch 作为原生 Anthropic 格式 provider 接入 Claude Science。该路径不需要额外协议桥，适合作为日常文本、代码与工具调用模型。

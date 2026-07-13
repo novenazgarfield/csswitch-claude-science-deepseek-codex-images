@@ -1,5 +1,7 @@
 # CSSwitch × Claude Science：DeepSeek、Codex 与 Codex Images 接入指南
 
+简体中文 | [English](README.en.md)
+
 本项目整理了一套面向 macOS 的社区配置方案，目标包含三部分：
 
 1. 通过 [CSSwitch](https://github.com/SuperJJ007/CSSwitch) 将 DeepSeek 接入 Claude Science；
