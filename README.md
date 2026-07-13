@@ -39,7 +39,7 @@ CSSwitch 是 Claude Science 的启动入口。Profile 选定后，应通过 CSSw
 ## 仓库内容
 
 ```text
-docs/       三条接入教程、架构说明和发布边界
+docs/       三条接入教程和架构说明
 examples/   不含凭据的 CSSwitch、沙箱、MCP、LaunchAgent 样例
 scripts/    异步图像任务桥的沙箱端与宿主机端
 ```
