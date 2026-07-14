@@ -50,6 +50,18 @@ Claude Science sandbox
 
 Image job files contain only a job ID, prompt, model name, state, and generated result. The job directory should use `0700` permissions, and expired results should be removed regularly.
 
+## Reproducible core vs. host-specific extensions
+
+Keep two kinds of material separate when publishing a deployment path. The first can be reproduced on another macOS host from the documentation. The second depends on local versions, accounts, network setup, or browser state and belongs in troubleshooting notes or optional designs.
+
+| Category | Safe to include as a general deployment step | Keep as a host-specific option |
+| --- | --- | --- |
+| Model routing | DeepSeek Anthropic-compatible profile; Codex OAuth proxy on a loopback address | Claude Science slot mapping; patches to an installed CSSwitch app |
+| Tools | This repository's stdio image MCP, file queue, and one watcher | Compatibility fixes for official-account connectors, search API credentials, browser profiles, and cookies |
+| Network and SSH | CSSwitch isolated startup, loopback listeners, and least-privilege file permissions | SSH bridge (enable only when needed), port exposure, private-network allowances, or broad domain allowlists |
+
+CSSwitch `0.5.x` can reuse existing host SSH configuration through its SSH bridge, but it neither needs nor should be used to start an SSH service or expose a port. Its local external Skill installer can import or remove some public GitHub Skills; in third-party model mode, it is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
+
 ## Image job states
 
 ```text
@@ -68,5 +80,7 @@ A watcher claims work by atomically moving each file between directories. This p
 - v0.4.4 reuses the persistent Claude Science data directory, so the image MCP, bridge scripts, and sandbox permissions are expected to remain. Its Codex text profile must nevertheless be reconfigured and revalidated first; that does not make the full integration compatible.
 - A single-model Codex profile relies only on public OpenAI-compatible configuration and has a lower maintenance cost. Use and validate that approach first on v0.4.0+.
 - The image MCP and host watcher belong to this project and are not built-in CSSwitch components.
+- Back up before an upgrade. After it, verify an ordinary conversation, a low-risk tool call, and one real target connector. A saved profile or a running MCP process alone does not prove the end-to-end path works.
+- When a remote connector fails, isolate the endpoint, gateway, and runtime layers first. Do not present disabling the connector, allowing all Claude domains, or allowing the entire private network as general fixes.
 
 See [DeepSeek integration](deepseek.md), [Codex integration](codex.md), and the [Codex Images tool bridge](images.md) for setup instructions.

@@ -58,6 +58,18 @@ All configuration examples use placeholders or environment variables and must be
 - Codex Images: an experimental local integration that uses job submission and result polling to avoid one-shot MCP timeouts.
 - Multi-slot model routing inside Claude Science was verified only with CSSwitch v0.3.6's legacy Python proxy. It depends on a version-specific patch inside the installed application and cannot be carried directly to v0.4.0+ / v0.4.4. This repository records the design and validation boundary but does not distribute application files or an automatic patcher.
 
+## CSSwitch 0.5 and deployment boundaries
+
+The reproducible core of this repository remains the DeepSeek profile, the Codex OAuth profile, and the asynchronous image bridge. The SSH bridge and external Skill installer added in CSSwitch `0.5.x` are optional and do not change those three base paths.
+
+- The SSH bridge reuses existing host SSH configuration. It must not be presented as a reason to start an SSH service, expose ports, or copy private keys.
+- In third-party model mode, the CSSwitch local Skill installer is a limited public-GitHub-Skill import/removal path. It is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
+- Official-account connectors, online catalog features, and some native Skills can be unavailable or behave differently in third-party model mode. Documentation should distinguish official Claude from a CSSwitch third-party profile.
+- Do not put machine-specific gateway patches, private-network allow rules, search API credentials, browser profiles, cookies, or OAuth state into general deployment instructions. When a local MCP is needed, prefer stdio, register it with least privilege, restart Science from CSSwitch, and then verify it.
+- After every CSSwitch or Claude Science upgrade, back up first, then test one ordinary conversation, one low-risk tool call, and one real target connector call. Saving a profile alone is not a deployment test.
+
+See the [architecture guide](docs/en/architecture.md) for the detailed layering and upgrade rules.
+
 ## Relationship to CSSwitch
 
 This project depends on CSSwitch for isolated startup and model routing. CSSwitch is an independent project and its upstream repository currently uses the MIT License. This project is not affiliated with or endorsed by CSSwitch. Read the upstream [CSSwitch README and license](https://github.com/SuperJJ007/CSSwitch) before use.
