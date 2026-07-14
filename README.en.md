@@ -54,16 +54,18 @@ All configuration examples use placeholders or environment variables and must be
 - DeepSeek: connected through its Anthropic-compatible endpoint.
 - Codex text models: the verified implementation uses local [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) on the example address `127.0.0.1:8317`.
 - Codex Images: an experimental local integration that uses job submission and result polling to avoid one-shot MCP timeouts.
-- Multi-slot model routing inside Claude Science is version-dependent. This repository documents the design and a verified mapping, but does not modify or redistribute CSSwitch application files.
+- Create and maintain profiles through the CSSwitch `0.5.x` desktop panel. The JSON files in this repository are field references, not import files for overwriting `~/.csswitch/config.json`.
+- Three-slot Codex routing inside Claude Science is a host-specific compatibility extension, not a portable setting exposed by the CSSwitch `0.5.0` desktop UI. Revalidate it after every upgrade.
 
 ## CSSwitch 0.5 and deployment boundaries
 
-The reproducible core of this repository remains the DeepSeek profile, the Codex OAuth profile, and the asynchronous image bridge. The SSH bridge and external Skill installer added in CSSwitch `0.5.x` are optional and do not change those three base paths.
+CSSwitch `0.5.0` is the current validation baseline for this guide. Its reproducible core remains the DeepSeek profile, the Codex OAuth profile, and the asynchronous image bridge. The SSH bridge and external Skill installer added in CSSwitch `0.5.x` are optional and do not change those three base paths.
 
+- In 0.5, create, validate, and save profiles through the desktop panel. Do not overwrite `~/.csswitch/config.json` with an older minimal JSON file or an example from this repository: saved profiles also contain `template_id`, `category`, `api_format`, IDs, and ordering metadata.
 - The SSH bridge reuses existing host SSH configuration. It must not be presented as a reason to start an SSH service, expose ports, or copy private keys.
 - In third-party model mode, the CSSwitch local Skill installer is a limited public-GitHub-Skill import/removal path. It is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
 - Official-account connectors, online catalog features, and some native Skills can be unavailable or behave differently in third-party model mode. Documentation should distinguish official Claude from a CSSwitch third-party profile.
-- Do not put machine-specific gateway patches, private-network allow rules, search API credentials, browser profiles, cookies, or OAuth state into general deployment instructions. When a local MCP is needed, prefer stdio, register it with least privilege, restart Science from CSSwitch, and then verify it.
+- Do not put machine-specific gateway patches, Codex three-slot compatibility extensions, private-network allow rules, search API credentials, browser profiles, cookies, or OAuth state into general deployment instructions. When a local MCP is needed, prefer stdio, register it with least privilege, restart Science from CSSwitch, and then verify it.
 - After every CSSwitch or Claude Science upgrade, back up first, then test one ordinary conversation, one low-risk tool call, and one real target connector call. Saving a profile alone is not a deployment test.
 
 See the [architecture guide](docs/en/architecture.md) for the detailed layering and upgrade rules.

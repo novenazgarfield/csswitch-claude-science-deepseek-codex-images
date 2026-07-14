@@ -1,5 +1,8 @@
 {
+  "_note": "CSSwitch 0.5 panel field reference only; do not overwrite ~/.csswitch/config.json with this file.",
   "name": "Codex (ChatGPT OAuth)",
+  "template_id": "custom-openai-responses",
+  "api_format": "openai_responses",
   "base_url": "http://127.0.0.1:8317/v1",
   "api_key": "<LOCAL_PROXY_API_KEY>",
   "model": "<CODEX_MODEL_ID>"

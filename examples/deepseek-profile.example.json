@@ -1,5 +1,8 @@
 {
+  "_note": "CSSwitch 0.5 panel field reference only; do not overwrite ~/.csswitch/config.json with this file.",
   "name": "DeepSeek",
+  "template_id": "deepseek",
+  "api_format": "anthropic",
   "base_url": "https://api.deepseek.com/anthropic",
   "api_key": "<DEEPSEEK_API_KEY>",
   "model": "<DEEPSEEK_MODEL_ID>"

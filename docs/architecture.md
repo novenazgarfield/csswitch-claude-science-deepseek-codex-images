@@ -56,11 +56,11 @@ Claude Science 沙箱
 
 | 分类 | 可以纳入通用部署步骤 | 应保持为本机可选项 |
 | --- | --- | --- |
-| 模型路由 | DeepSeek Anthropic-compatible Profile；回环地址上的 Codex OAuth proxy | Claude Science 内三槽映射；对已安装 CSSwitch 文件的补丁 |
+| 模型路由 | DeepSeek Anthropic-compatible Profile；回环地址上的 Codex OAuth proxy；每个 Profile 固定一个显式模型 | Claude Science 内 Codex 三槽兼容映射；对已安装 CSSwitch 文件的补丁 |
 | 工具 | 本仓库的 stdio 图像 MCP、文件任务队列和单个 watcher | 官方账号 connector 的兼容修复、搜索 API、浏览器 profile 与 Cookie |
 | 网络与 SSH | CSSwitch 的隔离启动；回环监听；最小文件权限 | SSH bridge（按需启用）；任何端口暴露、私网放行或全域名 allowlist |
 
-CSSwitch `0.5.x` 的 SSH bridge 可复用宿主机既有 SSH 配置，但不需要也不应开启 SSH 服务或暴露端口。其本地外部 Skill installer 可处理部分公开 GitHub Skill 的导入/卸载；第三方模型模式下，它不等价于 Claude 官方 catalog、账号导入或 Skill 发布流程。
+CSSwitch `0.5.0` 的 SSH bridge 可复用宿主机既有 SSH 配置，但不需要也不应开启 SSH 服务或暴露端口。其本地外部 Skill installer 可处理部分公开 GitHub Skill 的导入/卸载；第三方模型模式下，它不等价于 Claude 官方 catalog、账号导入或 Skill 发布流程。
 
 ## 图像任务状态
 
@@ -75,9 +75,10 @@ submit/<job_id>.json
 
 ## 版本边界
 
+- 本文以 CSSwitch `0.5.0` 为基线。Profile 应由桌面面板创建、验证和保存；样例 JSON 只是字段参考，不能直接覆盖 `~/.csswitch/config.json`。
 - CSSwitch 的 Profile、目录结构和内部 gateway 可能随版本变化；部署时应以当前上游文档为准。
 - 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本较低。
-- Claude Science 三槽切换依赖额外模型映射能力，属于版本相关扩展；升级 CSSwitch 后必须重新验证。
+- 本机的 Codex 三槽切换使用内部标记 `__CSSWITCH_CODEX_56_SLOTS__` 和兼容路由：Opus → Sol、Sonnet → Terra、Haiku → Luna。它不是 `model_slot_mapping` 这样的通用 JSON 字段，也不是 CSSwitch 0.5 桌面 UI 的公开配置项；升级后必须重新验证。
 - 图像 MCP 与 watcher 是本项目自有代码，不是 CSSwitch 的内置能力。
 - 升级前先备份；升级后必须验证普通对话、低风险工具调用和一个真实目标 connector。Profile 保存成功或 MCP 进程启动，并不能单独证明完整链路可用。
 - 遇到远程 connector 失败时，先定位 endpoint、gateway 与运行时三个层次；不要以禁用 connector、放开全部 Claude 域名或允许全部私网作为通用修复。

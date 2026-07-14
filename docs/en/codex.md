@@ -38,18 +38,19 @@ The local proxy access key is not the Codex OAuth token. Do not copy the OAuth t
 
 ## CSSwitch profile
 
-Create a custom OpenAI-compatible profile in CSSwitch. If the proxy supports the Responses API, prefer CSSwitch's Custom OpenAI Responses provider. Otherwise select OpenAI Chat Completions according to the proxy implementation.
+Create a custom OpenAI-compatible profile in the CSSwitch `0.5.0` desktop panel. If the proxy supports the Responses API, prefer CSSwitch's Custom OpenAI Responses provider. Otherwise select OpenAI Chat Completions according to the proxy implementation. Do not edit `~/.csswitch/config.json` directly: a 0.5 saved profile also carries template, category, ID, and ordering metadata.
 
 Example values:
 
 | Field | Example |
 | --- | --- |
+| Template / API format | `custom-openai-responses` / `openai_responses` |
 | Profile name | `Codex (ChatGPT OAuth)` |
 | Base URL | `http://127.0.0.1:8317/v1`, or the actual loopback port |
 | API key | The access key generated for the local proxy |
 | Model | A Codex model ID listed by the local proxy |
 
-See the [redacted profile example](../../examples/csswitch-profile.example.json). Placeholders in that file are not runnable values.
+See the [redacted profile field reference](../../examples/csswitch-profile.example.json). It is not an importable `config.json`: fill the values in the 0.5 panel and save them there. Its placeholders are not runnable values.
 
 ## Single-model profiles
 
@@ -63,9 +64,9 @@ Codex - Model C
 
 Switch models by activating a different CSSwitch profile and using one-click start again. This approach does not modify CSSwitch's internal model router and is the least sensitive to CSSwitch upgrades.
 
-## Switching three models inside Claude Science
+## Three-model switching in this local 0.5 deployment
 
-Switching three Codex models directly from the Opus, Sonnet, and Haiku selector in Claude Science requires the CSSwitch routing layer to map each canonical Claude slot to an actual model ID.
+In this machine's verified CSSwitch `0.5.0` deployment, the Codex Responses profile uses the internal `__CSSWITCH_CODEX_56_SLOTS__` marker. A local compatibility route maps the canonical Claude Science slots to the actual Codex model IDs. It does not require adding a `model_slot_mapping`-style field to the profile.
 
 Verified example mapping:
 
@@ -75,19 +76,15 @@ Verified example mapping:
 | Sonnet | GPT-5.6 Terra | `gpt-5.6-terra` |
 | Haiku | GPT-5.6 Luna | `gpt-5.6-luna` |
 
-The mapping must apply only to the Codex profile. It must not affect DeepSeek or the official Claude profile. A generic configuration shape would be:
+The mapping must apply only to the Codex profile. It must not affect DeepSeek or the official Claude profile. The currently verified behavior is:
 
-```json
-{
-  "model_slot_mapping": {
-    "opus":   { "display": "GPT-5.6 Sol",   "model": "gpt-5.6-sol" },
-    "sonnet": { "display": "GPT-5.6 Terra", "model": "gpt-5.6-terra" },
-    "haiku":  { "display": "GPT-5.6 Luna",  "model": "gpt-5.6-luna" }
-  }
-}
+```text
+claude-opus-4-8   → GPT-5.6 Sol   → gpt-5.6-sol
+claude-sonnet-5   → GPT-5.6 Terra → gpt-5.6-terra
+claude-haiku-4-5  → GPT-5.6 Luna  → gpt-5.6-luna
 ```
 
-The current CSSwitch version may not support these fields natively. Patching files inside an installed application is version-dependent, can break after an upgrade, and is not a portable installation method. This repository therefore documents the mapping design and verified behavior without distributing application files or an automatic patcher. Prefer an upstream profile-level slot-mapping feature if one becomes available.
+This is not a public, freely configurable slot-mapping feature in the CSSwitch 0.5 desktop UI. The local gateway is modified for other compatibility fixes, and this marker depends on local compatibility resources, so it is host-specific. This repository does not distribute an application patch or automatic patcher. On another machine, start with single-model profiles; use this mapping only after a backup and only when that 0.5 installation is known to include the same compatible route.
 
 ## Verification
 

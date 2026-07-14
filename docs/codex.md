@@ -38,18 +38,19 @@ http://127.0.0.1:8317/v1/images/generations
 
 ## CSSwitch Profile
 
-在 CSSwitch 中新建自定义 OpenAI-compatible Profile。若代理支持 Responses API，优先选择 CSSwitch 的 Custom OpenAI Responses；否则按代理实际实现选择 OpenAI Chat Completions。
+在 CSSwitch `0.5.0` 桌面面板中创建自定义 OpenAI-compatible Profile。若代理支持 Responses API，优先选择 CSSwitch 的 Custom OpenAI Responses；否则按代理实际实现选择 OpenAI Chat Completions。不要直接编辑 `~/.csswitch/config.json`：0.5 保存的 Profile 还会带上模板、分类、ID 和排序等元数据。
 
 示例：
 
 | 字段 | 示例 |
 | --- | --- |
+| 模板 / API 格式 | `custom-openai-responses` / `openai_responses` |
 | Profile 名称 | `Codex (ChatGPT OAuth)` |
 | Base URL | `http://127.0.0.1:8317/v1`，或实际使用的回环端口 |
 | API Key | 本地代理生成的访问 Key |
 | Model | 本地代理列出的 Codex 模型 ID |
 
-可参考 [脱敏 Profile 示例](../examples/csswitch-profile.example.json)。示例中的占位符不能直接用于运行。
+可参考 [脱敏 Profile 字段参考](../examples/csswitch-profile.example.json)。它不是可导入的完整 `config.json`；应在 0.5 面板中填写并保存，示例中的占位符不能直接用于运行。
 
 ## 单模型模式
 
@@ -63,9 +64,9 @@ Codex - Model C
 
 切换模型时在 CSSwitch 中切换 Profile，然后再次使用「一键开始」。这种方式不需要修改 CSSwitch 的内部模型路由，版本兼容性最好。
 
-## Claude Science 内三槽切换
+## 本机 0.5 部署中的 Claude Science 三槽切换
 
-若希望在 Claude Science 内直接通过 Opus / Sonnet / Haiku 切换三个 Codex 模型，需要 CSSwitch 路由层支持「Claude canonical slot → 实际模型 ID」映射。
+这台机器已验证的 CSSwitch `0.5.0` 部署会在 Codex Responses Profile 使用内部标记 `__CSSWITCH_CODEX_56_SLOTS__`，由本机兼容路由把 Claude Science 的 canonical slot 映射到实际 Codex 模型 ID。它不要求把 `model_slot_mapping` 之类的字段写入 Profile。
 
 已验证过的映射示例：
 
@@ -75,19 +76,15 @@ Codex - Model C
 | Sonnet | GPT-5.6 Terra | `gpt-5.6-terra` |
 | Haiku | GPT-5.6 Luna | `gpt-5.6-luna` |
 
-该映射只应对 Codex Profile 生效，不能影响 DeepSeek 或官方 Claude Profile。通用配置结构建议如下：
+该映射只应对该 Codex Profile 生效，不能影响 DeepSeek 或官方 Claude Profile。当前校验过的行为是：
 
-```json
-{
-  "model_slot_mapping": {
-    "opus":   { "display": "GPT-5.6 Sol",   "model": "gpt-5.6-sol" },
-    "sonnet": { "display": "GPT-5.6 Terra", "model": "gpt-5.6-terra" },
-    "haiku":  { "display": "GPT-5.6 Luna",  "model": "gpt-5.6-luna" }
-  }
-}
+```text
+claude-opus-4-8   → GPT-5.6 Sol   → gpt-5.6-sol
+claude-sonnet-5   → GPT-5.6 Terra → gpt-5.6-terra
+claude-haiku-4-5  → GPT-5.6 Luna  → gpt-5.6-luna
 ```
 
-CSSwitch 当前版本未必原生支持上述字段。对已安装 App 的内部文件进行补丁属于版本相关实验：应用升级后可能失效，也不适合作为通用安装步骤。因此本仓库保留映射设计和验证结果，但不分发已安装 App 文件或自动修改脚本。上游若提供正式的 Profile 槽位映射功能，应优先改用上游实现。
+这不是 CSSwitch 0.5 桌面 UI 中公开、可任意配置的槽位映射功能。本机网关因其他兼容性修复而处于修改状态，且该标记依赖本机兼容资源；因此它属于机器专属扩展。仓库不分发 App 补丁或自动修改脚本。另一台机器应先使用单模型 Profile；只有在其 0.5 安装明确具备相同兼容路由、且先完成备份后，才可采用这一映射。
 
 ## 验证
 
