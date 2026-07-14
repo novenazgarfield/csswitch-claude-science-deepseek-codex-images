@@ -56,6 +56,18 @@ scripts/    异步图像任务桥的沙箱端与宿主机端
 - Codex Images：实验性本地集成，通过提交任务与轮询结果规避 MCP 单次调用超时。
 - Claude Science 内的多槽模型映射属于版本相关扩展；仓库说明其设计与已验证映射，但不修改或重新分发 CSSwitch 应用文件。
 
+## CSSwitch 0.5 与部署边界
+
+本仓库的可复现核心仍是 DeepSeek Profile、Codex OAuth Profile 和异步图像桥。CSSwitch `0.5.x` 增加的 SSH bridge 与外部 Skill 安装器可以按需使用，但不改变这三条基础链路。
+
+- SSH bridge 是可选项：它复用宿主机现有 SSH 配置，不应通过本文要求开启 SSH 服务、暴露端口或复制私钥。
+- 第三方模型模式下，CSSwitch 的本地 Skill installer 可作为公开 GitHub Skill 的有限导入/卸载工具；它不是 Claude 官方 catalog、账号导入或 Skill 发布机制的等价替代。
+- 官方账号绑定 connector、在线 catalog 与部分原生 Skill 在第三方模型模式下可能不可用或行为不同。部署说明必须明确区分「官方 Claude」与「CSSwitch 第三方 Profile」。
+- 不把机器专属的 gateway 补丁、私网放行规则、搜索 API、浏览器 profile、Cookie 或 OAuth 数据写入通用部署步骤。若需要本地 MCP，优先使用 stdio，最小权限注册，并在 CSSwitch 重启 Science 后再验证。
+- 每次 CSSwitch 或 Claude Science 升级后，先备份，再做一条普通对话、一次低风险工具调用和一次实际目标 connector 调用；不要仅凭 Profile 保存成功判断部署可用。
+
+更完整的分层与升级准则见 [架构说明](docs/architecture.md)。
+
 ## 与 CSSwitch 的关系
 
 本项目依赖 CSSwitch 提供的隔离启动和模型路由能力。CSSwitch 是独立项目，其上游仓库当前采用 MIT 许可。本项目与 CSSwitch 不存在隶属或背书关系，使用前应同时阅读 [CSSwitch README 与许可证](https://github.com/SuperJJ007/CSSwitch)。

@@ -50,6 +50,18 @@ Claude Science 沙箱
 
 图像任务文件只包含任务 ID、提示词、模型名、状态和生成结果。任务目录权限应为 `0700`，结果应定期清理。
 
+## 可复现核心与机器专属扩展
+
+发布部署方案时应把两类内容分开：前者可以在另一台 macOS 上按文档复现；后者依赖本机版本、账号、网络或浏览器状态，只能作为排错案例或可选设计说明。
+
+| 分类 | 可以纳入通用部署步骤 | 应保持为本机可选项 |
+| --- | --- | --- |
+| 模型路由 | DeepSeek Anthropic-compatible Profile；回环地址上的 Codex OAuth proxy | Claude Science 内三槽映射；对已安装 CSSwitch 文件的补丁 |
+| 工具 | 本仓库的 stdio 图像 MCP、文件任务队列和单个 watcher | 官方账号 connector 的兼容修复、搜索 API、浏览器 profile 与 Cookie |
+| 网络与 SSH | CSSwitch 的隔离启动；回环监听；最小文件权限 | SSH bridge（按需启用）；任何端口暴露、私网放行或全域名 allowlist |
+
+CSSwitch `0.5.x` 的 SSH bridge 可复用宿主机既有 SSH 配置，但不需要也不应开启 SSH 服务或暴露端口。其本地外部 Skill installer 可处理部分公开 GitHub Skill 的导入/卸载；第三方模型模式下，它不等价于 Claude 官方 catalog、账号导入或 Skill 发布流程。
+
 ## 图像任务状态
 
 ```text
@@ -67,5 +79,7 @@ submit/<job_id>.json
 - 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本较低。
 - Claude Science 三槽切换依赖额外模型映射能力，属于版本相关扩展；升级 CSSwitch 后必须重新验证。
 - 图像 MCP 与 watcher 是本项目自有代码，不是 CSSwitch 的内置能力。
+- 升级前先备份；升级后必须验证普通对话、低风险工具调用和一个真实目标 connector。Profile 保存成功或 MCP 进程启动，并不能单独证明完整链路可用。
+- 遇到远程 connector 失败时，先定位 endpoint、gateway 与运行时三个层次；不要以禁用 connector、放开全部 Claude 域名或允许全部私网作为通用修复。
 
 具体操作分别见 [DeepSeek 接入](deepseek.md)、[Codex 接入](codex.md)和 [Codex Images 工具桥](images.md)。
