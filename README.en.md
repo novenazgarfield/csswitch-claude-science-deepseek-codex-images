@@ -10,7 +10,7 @@ This repository documents a community integration for macOS with three goals:
 
 This project is not an official extension of CSSwitch, Claude Science, Anthropic, or OpenAI. It does not include source code or binaries from those projects, account credentials, or API keys.
 
-> **Version baseline (important):** These instructions and examples were verified with **CSSwitch v0.3.6** and its legacy Python-proxy architecture. They do not apply unchanged to v0.4.0+ (including v0.4.4): the Rust gateway replaces the installed proxy patch that this project uses for three-slot Codex routing. See [Architecture](docs/en/architecture.md) and [Codex integration](docs/en/codex.md).
+> **Version baseline (important):** This repository's Codex text routing was updated for **CSSwitch v0.6.0**: Sol / Terra / Luna three-slot routing was verified in a customized v0.6 Rust gateway. It is not a general upstream CSSwitch Profile field, so stock v0.6 should use a single-model Profile. DeepSeek and the image bridge still need separate end-to-end verification after every upgrade. See [Architecture](docs/en/architecture.md) and [Codex integration](docs/en/codex.md).
 
 ## Documentation
 
@@ -56,14 +56,14 @@ All configuration examples use placeholders or environment variables and must be
 - DeepSeek: connected through its Anthropic-compatible endpoint.
 - Codex text models: the verified implementation uses local [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) on the example address `127.0.0.1:8317`.
 - Codex Images: an experimental local integration that uses job submission and result polling to avoid one-shot MCP timeouts.
-- Multi-slot model routing inside Claude Science was verified only with CSSwitch v0.3.6's legacy Python proxy. It depends on a version-specific patch inside the installed application and cannot be carried directly to v0.4.0+ / v0.4.4. This repository records the design and validation boundary but does not distribute application files or an automatic patcher.
+- Multi-slot model routing inside Claude Science was verified in a customized CSSwitch v0.6 Rust gateway: Opus / Sonnet / Haiku route to GPT-5.6 Sol / Terra / Luna. This remains a version-specific source-level change rather than a public upstream v0.6 Profile setting. This repository records the design, boundary, and redacted examples; it does not distribute application files, binaries, or an automatic patcher.
 
-## CSSwitch 0.5 and deployment boundaries
+## CSSwitch 0.6 and deployment boundaries
 
-The reproducible core of this repository remains the DeepSeek profile, the Codex OAuth profile, and the asynchronous image bridge. The SSH bridge and external Skill installer added in CSSwitch `0.5.x` are optional and do not change those three base paths.
+The reproducible core of this repository remains the DeepSeek profile, the Codex OAuth profile, and the asynchronous image bridge. CSSwitch `0.6.0`'s external Skill installer is optional and does not change those three base paths.
 
 - The SSH bridge reuses existing host SSH configuration. It must not be presented as a reason to start an SSH service, expose ports, or copy private keys.
-- In third-party model mode, the CSSwitch local Skill installer is a limited public-GitHub-Skill import/removal path. It is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
+- In third-party model mode, the CSSwitch local Skill installer is a limited public-GitHub-Skill import/removal path. It is not equivalent to the official Claude catalog, account import, or Skill publishing workflow. Let CSSwitch and Claude Science manage the routing directory, connector, and database; do not edit the database by hand to suppress a warning.
 - Official-account connectors, online catalog features, and some native Skills can be unavailable or behave differently in third-party model mode. Documentation should distinguish official Claude from a CSSwitch third-party profile.
 - Do not put machine-specific gateway patches, private-network allow rules, search API credentials, browser profiles, cookies, or OAuth state into general deployment instructions. When a local MCP is needed, prefer stdio, register it with least privilege, restart Science from CSSwitch, and then verify it.
 - After every CSSwitch or Claude Science upgrade, back up first, then test one ordinary conversation, one low-risk tool call, and one real target connector call. Saving a profile alone is not a deployment test.

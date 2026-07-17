@@ -15,9 +15,12 @@ Codex OAuth
 
 ## Version baseline
 
-The complete integration in this document, including Sol / Terra / Luna three-slot switching, was verified with **CSSwitch v0.3.6** and its legacy Python proxy. CSSwitch moved to a Rust gateway in v0.4.0; upgrading to v0.4.4 replaces the installed Python-proxy patch used for slot mapping and does not recognize this setup's internal slot marker. Do not carry an existing three-slot configuration directly to v0.4.0+.
+The Codex text routing in this guide was rechecked with **CSSwitch v0.6.0**. v0.6 uses the Rust gateway and no longer depends on the legacy Python proxy.
 
-For v0.4.0+, first use an explicit single Codex model ID in the profile and revalidate the text path yourself. Three-slot routing needs an equivalent Rust-gateway mapping before it can be restored.
+Three-slot switching has two explicit boundaries:
+
+- **Stock CSSwitch v0.6:** use one explicit Codex model ID. This is the most portable option.
+- **Customized v0.6 Rust gateway:** map Claude's three fixed menu slots to Sol / Terra / Luna. This repository records the verified mapping and its safety boundary, but does not distribute a modified app, binary, or automatic patcher.
 
 The verified proxy implementation for this repository is [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI). In the tested setup, CSSwitch manages it as a per-user local service. After Codex OAuth authentication, it listens on:
 
@@ -93,7 +96,9 @@ The mapping must apply only to the Codex profile. It must not affect DeepSeek or
 }
 ```
 
-This mapping was verified as a version-specific patch to the installed Python proxy in CSSwitch v0.3.6; it is not a portable CSSwitch configuration field. CSSwitch v0.4.0+ (including v0.4.4) uses a Rust gateway and cannot reuse that patch or its internal slot marker. This repository documents the mapping design and validation boundary without distributing application files or an automatic patcher. Prefer an upstream profile-level slot-mapping feature if one becomes available.
+In the verified customized v0.6 gateway, the Codex Profile uses the internal marker `__CSSWITCH_CODEX_56_SLOTS__` instead of a fixed model ID. The gateway returns the three display slots to Claude Science and rewrites requests to the corresponding Codex model IDs; unknown or legacy menu IDs safely fall back to Terra.
+
+Use this marker only with a custom build that contains the corresponding Rust-gateway change. Putting it in a stock CSSwitch v0.6 Profile does not enable three-slot routing. Never commit a real proxy key, OAuth token, complete proxy configuration, user path, organization ID, or proxy log; retain only placeholders, loopback addresses, and model IDs. Prefer an upstream Profile-level slot-mapping feature if one becomes available.
 
 ## Verification
 
