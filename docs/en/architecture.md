@@ -56,11 +56,11 @@ Keep two kinds of material separate when publishing a deployment path. The first
 
 | Category | Safe to include as a general deployment step | Keep as a host-specific option |
 | --- | --- | --- |
-| Model routing | DeepSeek Anthropic-compatible profile; Codex OAuth proxy on a loopback address | Claude Science slot mapping; patches to an installed CSSwitch app |
+| Model routing | DeepSeek Anthropic-compatible profile; single-model Codex OAuth proxy on a loopback address | Claude Science slot mapping; a customized CSSwitch Rust gateway |
 | Tools | This repository's stdio image MCP, file queue, and one watcher | Compatibility fixes for official-account connectors, search API credentials, browser profiles, and cookies |
 | Network and SSH | CSSwitch isolated startup, loopback listeners, and least-privilege file permissions | SSH bridge (enable only when needed), port exposure, private-network allowances, or broad domain allowlists |
 
-CSSwitch `0.5.x` can reuse existing host SSH configuration through its SSH bridge, but it neither needs nor should be used to start an SSH service or expose a port. Its local external Skill installer can import or remove some public GitHub Skills; in third-party model mode, it is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
+CSSwitch `0.6.0` can reuse existing host SSH configuration through its SSH bridge, but it neither needs nor should be used to start an SSH service or expose a port. Its local external Skill installer can import or remove some public GitHub Skills; in third-party model mode, it is not equivalent to the official Claude catalog, account import, or Skill publishing workflow.
 
 ## Image job states
 
@@ -75,10 +75,10 @@ A watcher claims work by atomically moving each file between directories. This p
 
 ## Version boundaries
 
-- The complete setup in this repository is verified against **CSSwitch v0.3.6**, especially Sol / Terra / Luna Codex slot routing; that implementation depends on a patch to the legacy Python proxy inside the installed application.
-- CSSwitch moved to a Rust gateway in v0.4.0. A direct upgrade to v0.4.4 replaces that Python proxy; internal markers such as `__CSSWITCH_CODEX_56_SLOTS__` have no equivalent new mapping, so the three-slot Codex text path breaks.
-- v0.4.4 reuses the persistent Claude Science data directory, so the image MCP, bridge scripts, and sandbox permissions are expected to remain. Its Codex text profile must nevertheless be reconfigured and revalidated first; that does not make the full integration compatible.
-- A single-model Codex profile relies only on public OpenAI-compatible configuration and has a lower maintenance cost. Use and validate that approach first on v0.4.0+.
+- Codex text routing was rechecked with **CSSwitch v0.6.0**. DeepSeek and the image bridge still require separate end-to-end verification after every upgrade.
+- Sol / Terra / Luna routing was verified in a customized v0.6 Rust gateway. `__CSSWITCH_CODEX_56_SLOTS__` is an internal marker recognized only by that build, not a public upstream configuration field.
+- v0.6 reuses the persistent Claude Science data directory, so the image MCP, bridge scripts, and sandbox permissions are expected to remain. Reconfigure and revalidate the Codex text Profile after an upgrade; that does not make the complete integration automatically compatible.
+- A single-model Codex Profile relies only on public OpenAI-compatible configuration and has the lowest maintenance cost. Prefer and validate that route first; use a three-slot build only when the corresponding source changes can be maintained.
 - The image MCP and host watcher belong to this project and are not built-in CSSwitch components.
 - Back up before an upgrade. After it, verify an ordinary conversation, a low-risk tool call, and one real target connector. A saved profile or a running MCP process alone does not prove the end-to-end path works.
 - When a remote connector fails, isolate the endpoint, gateway, and runtime layers first. Do not present disabling the connector, allowing all Claude domains, or allowing the entire private network as general fixes.

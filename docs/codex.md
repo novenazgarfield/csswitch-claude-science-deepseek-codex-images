@@ -15,9 +15,12 @@ Codex OAuth
 
 ## 版本基线
 
-本文的完整联调（包括 Sol / Terra / Luna 三槽切换）基于 **CSSwitch v0.3.6** 的旧 Python proxy 架构验证。v0.4.0 起 CSSwitch 改用 Rust gateway；升级到 v0.4.4 会替换三槽映射所依赖的已安装 Python 代理补丁，并且不会识别本方案使用的内部槽位标记。因此，不能把现有三槽配置直接带到 v0.4.0+。
+本文的 Codex 文本路由已在 **CSSwitch v0.6.0** 下复核。v0.6 使用 Rust gateway，不再依赖旧 Python proxy。
 
-若使用 v0.4.0+，应先将 Codex Profile 改为明确的单一模型 ID，并自行重新验证文本链路；三槽方案须有等价的 Rust gateway 映射实现后才能恢复。
+三槽切换有两种明确边界：
+
+- **原版 CSSwitch v0.6**：使用一个明确的 Codex 模型 ID；这是最容易复现的方式。
+- **自定义 v0.6 Rust gateway**：可将 Claude 的三个固定菜单槽映射到 Sol / Terra / Luna。本仓库记录已验证的映射和安全边界，但不分发修改过的 App、二进制文件或自动补丁。
 
 本项目已验证的代理实现是 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI)。在已验证环境中，它由 CSSwitch 配置为用户级本地服务，完成 Codex OAuth 登录后监听：
 
@@ -93,7 +96,9 @@ Codex - Model C
 }
 ```
 
-上述映射是在 CSSwitch v0.3.6 的已安装 Python proxy 上验证的版本相关补丁，并非 CSSwitch 的通用配置字段。v0.4.0+（包括 v0.4.4）改用 Rust gateway，不能复用该补丁或内部槽位标记。仓库保留映射设计和验证结果，但不分发已安装 App 文件或自动修改脚本；上游若提供正式的 Profile 槽位映射功能，应优先改用上游实现。
+在已验证的自定义 v0.6 gateway 中，Codex Profile 使用内部标记 `__CSSWITCH_CODEX_56_SLOTS__` 代替固定模型 ID。gateway 对 Claude Science 返回上述三个显示槽，并将实际请求分别改写为对应 Codex 模型 ID；未知或旧的菜单 ID 安全地回落到 Terra。
+
+这个标记只应由包含相应 Rust gateway 改动的自定义构建使用。把它填入原版 CSSwitch v0.6 Profile 不会启用三槽映射。不要把真实代理 Key、OAuth token、完整代理配置、用户目录、组织 ID 或代理日志提交到仓库；只保留占位符、回环地址和实际模型 ID。上游若提供正式的 Profile 槽位映射功能，应优先改用上游实现。
 
 ## 验证
 

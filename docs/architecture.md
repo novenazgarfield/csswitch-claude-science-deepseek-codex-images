@@ -56,11 +56,11 @@ Claude Science 沙箱
 
 | 分类 | 可以纳入通用部署步骤 | 应保持为本机可选项 |
 | --- | --- | --- |
-| 模型路由 | DeepSeek Anthropic-compatible Profile；回环地址上的 Codex OAuth proxy | Claude Science 内三槽映射；对已安装 CSSwitch 文件的补丁 |
+| 模型路由 | DeepSeek Anthropic-compatible Profile；回环地址上的单模型 Codex OAuth proxy | Claude Science 内三槽映射；自定义 CSSwitch Rust gateway |
 | 工具 | 本仓库的 stdio 图像 MCP、文件任务队列和单个 watcher | 官方账号 connector 的兼容修复、搜索 API、浏览器 profile 与 Cookie |
 | 网络与 SSH | CSSwitch 的隔离启动；回环监听；最小文件权限 | SSH bridge（按需启用）；任何端口暴露、私网放行或全域名 allowlist |
 
-CSSwitch `0.5.x` 的 SSH bridge 可复用宿主机既有 SSH 配置，但不需要也不应开启 SSH 服务或暴露端口。其本地外部 Skill installer 可处理部分公开 GitHub Skill 的导入/卸载；第三方模型模式下，它不等价于 Claude 官方 catalog、账号导入或 Skill 发布流程。
+CSSwitch `0.6.0` 的 SSH bridge 可复用宿主机既有 SSH 配置，但不需要也不应开启 SSH 服务或暴露端口。其本地外部 Skill installer 可处理部分公开 GitHub Skill 的导入/卸载；第三方模型模式下，它不等价于 Claude 官方 catalog、账号导入或 Skill 发布流程。
 
 ## 图像任务状态
 
@@ -75,10 +75,10 @@ submit/<job_id>.json
 
 ## 版本边界
 
-- 本仓库的完整方案以 **CSSwitch v0.3.6** 为验证基线，尤其是 Codex 的 Sol / Terra / Luna 三槽映射；该实现依赖旧版应用内的 Python proxy 补丁。
-- CSSwitch v0.4.0 起改用 Rust gateway。直接升级到 v0.4.4 会替换上述 Python proxy；`__CSSWITCH_CODEX_56_SLOTS__` 这类内部标记没有等价的新版映射，三槽 Codex 文本链路会失效。
-- v0.4.4 会复用持久化的 Claude Science 数据目录，因此图像 MCP、桥接脚本和沙箱权限预计仍会保留；但其依赖的 Codex 文本 Profile 必须先重新配置并验证，不能据此宣称整套方案兼容。
-- 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本较低；使用 v0.4.0+ 时应先采用这一方式并独立验证。
+- Codex 文本路由已在 **CSSwitch v0.6.0** 下复核。DeepSeek 与图像桥仍应在每次升级后分别完成端到端验证。
+- Sol / Terra / Luna 三槽路由已在自定义 v0.6 Rust gateway 中验证：`__CSSWITCH_CODEX_56_SLOTS__` 仅是该构建识别的内部标记，不是上游公开配置字段。
+- v0.6 会复用持久化的 Claude Science 数据目录，因此图像 MCP、桥接脚本和沙箱权限预计仍会保留；升级后仍须重新验证 Codex 文本 Profile，不能据此宣称整套方案天然兼容。
+- 单模型 Codex Profile 只依赖公开的 OpenAI-compatible 配置，维护成本最低；应优先采用并独立验证。三槽构建只应在能维护对应源码改动时使用。
 - 图像 MCP 与 watcher 是本项目自有代码，不是 CSSwitch 的内置能力。
 - 升级前先备份；升级后必须验证普通对话、低风险工具调用和一个真实目标 connector。Profile 保存成功或 MCP 进程启动，并不能单独证明完整链路可用。
 - 遇到远程 connector 失败时，先定位 endpoint、gateway 与运行时三个层次；不要以禁用 connector、放开全部 Claude 域名或允许全部私网作为通用修复。
